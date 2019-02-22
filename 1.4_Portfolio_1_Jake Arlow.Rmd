@@ -1,0 +1,152 @@
+---
+title: "1.4 Portfolio 1 Jake Arlow"
+output: html_notebook
+---
+
+
+
+```{r}
+library("BIEN")
+library(ape) #Package for working with phylogenies in R
+library(maps) #Useful for making quick maps of occurrences
+library(sp) # A package for spatial data
+library(dplyr)
+library(lattice)
+```
+
+Alright here's the occurence and range map for American Chestnut: 
+
+```{r}
+chestnut_range <- BIEN_ranges_load_species("Castanea dentata")
+chestnut_occurrence <- BIEN_occurrence_species(species = "Castanea dentata")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,-20), ylim=c(-60, 80))
+plot(chestnut_range, col="green", add=T)
+points(cbind(chestnut_occurrence$longitude, chestnut_occurrence$latitude), col="blue", pch=20, cex=1)
+```
+There's chestnuts in Hawaii? Wild.
+
+Next: trait data 
+
+```{r}
+Castanea_dentata <- BIEN_trait_traitbyspecies(trait = "whole plant height", species = "Castanea dentata")
+str(Castanea_dentata)
+Castanea_dentata
+```
+
+Mean whole plant height for american chestnut:
+
+```{r}
+chestnut = Castanea_dentata[c(3)] 
+chestnut = as.data.frame(chestnut)
+chestnut_height = as.numeric(chestnut$trait_value)
+mean(chestnut_height, data=chestnut)
+```
+
+alright now i'm gonna compare it with Chinese chestnut:
+
+```{r}
+Castanea_mollissima <- BIEN_trait_traitbyspecies(trait = "whole plant height", species = "Castanea mollissima")
+str(Castanea_crenata)
+Castanea_mollissima
+```
+
+Mean whole plant height for Chinese chestnut:
+
+```{r}
+C_chestnut = Castanea_mollissima[c(3)] 
+C_chestnut = as.data.frame(C_chestnut)
+C_chestnut_height = as.numeric(C_chestnut$trait_value)
+mean(C_chestnut_height, data=C_chestnut)
+```
+
+making a box plot for American Chestnut:
+
+```{r}
+boxplot(chestnut_height)
+```
+
+Box plot for Chinese Chestnut:
+
+```{r}
+boxplot(C_chestnut_height)
+```
+
+I'm not sure if this really worked... (the Chinese chestnut box plot)
+
+T-test for the two chestnut species:
+
+```{r}
+t.test(chestnut_height, C_chestnut_height)
+```
+
+Now I'm gonna do this again but for breadfruit (trying it again bc it didn't work for me when we did it in lab):
+
+
+Range and occurence map for Artocarpus altilis:
+
+```{r}
+breadfruit_range <- BIEN_ranges_load_species("Artocarpus altilis")
+breadfruit_occurrence <- BIEN_occurrence_species(species = "Artocarpus altilis")
+map('world', fill=T, col="grey", bg="light blue", xlim=c(-180,-20), ylim=c(-60, 80))
+plot(breadfruit_range, col="green", add=T)
+points(cbind(breadfruit_occurrence$longitude, breadfruit_occurrence$latitude), col="blue", pch=20, cex=1)
+```
+
+
+Trait data for Artocarpus altilis:
+
+```{r}
+breadfruit1 <- BIEN_trait_traitbyspecies(trait = "whole plant height", species = "Artocarpus altilis")
+str(breadfruit1)
+breadfruit1
+```
+
+
+Trait data for other species of breadfruit:
+
+```{r}
+breadfruit2 <- BIEN_trait_traitbyspecies(trait = "whole plant height", species = "Artocarpus hirsutus")
+str(breadfruit2)
+breadfruit2
+```
+
+
+mean whole plant height Artocarpus altilis:
+
+```{r}
+breadfruit1 = breadfruit1[c(3)] 
+breadfruit1 = as.data.frame(breadfruit1)
+breadfruit1_height = as.numeric(breadfruit1$trait_value)
+mean(breadfruit1_height, data=breadfruit1)
+```
+
+
+mean whole plant height Artocarpus hirsutus:
+
+```{r}
+breadfruit2 = breadfruit2[c(3)] 
+breadfruit2 = as.data.frame(breadfruit2)
+breadfruit2_height = as.numeric(breadfruit2$trait_value)
+mean(breadfruit2_height, data=breadfruit2)
+```
+
+
+making a box plot for Artocarpus altilis:
+
+```{r}
+boxplot(breadfruit1_height)
+```
+
+making a box plot for Artocarpus hirsutus:
+
+```{r}
+boxplot(breadfruit2_height)
+```
+
+
+T-test for the two breadfruit species:
+
+```{r}
+t.test(breadfruit1_height, breadfruit2_height)
+```
+
